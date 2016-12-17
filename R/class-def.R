@@ -49,6 +49,7 @@ setClass("torque", contains = "job")
 setClass("pbs", contains = "job")
 setClass("lsf", contains = "job")
 setClass("sge", contains = "job")
+setClass("sge1", contains = "job")
 setClass("moab", contains = "job")
 setClass("slurm", contains = "job")
 
@@ -116,7 +117,7 @@ setClass("flow", representation(jobs = "list",
 #' @examples
 #' qobj <- queue(platform='lsf')
 queue <- function(object,
-                  platform = c('local', 'lsf', 'torque', 'sge', 'moab'),
+                  platform = c('local', 'lsf', 'torque', 'sge', 'moab', 'sge1'),
                   ## --- format is a advanced option, use with caution
                   format = "",
                   
@@ -162,7 +163,7 @@ queue <- function(object,
       message("Setting default memory to: ", memory,
               ". If this is more than queue max (/improper format), job will fail.\n")
   }
-  if (platform %in% c("torque", "sge")){
+  if (platform %in% c("torque", "sge", "sge1")){
     
     if (missing(format))
       format="${SUBMIT_EXE} -N ${JOBNAME} -q ${QUEUE} -l nodes=${NODES}:ppn=${CPU} -l walltime=${WALLTIME} -l mem=${MEMORY} -S /bin/bash -d ${CWD} -V -o ${STDOUT} -m ae -M ${EMAIL} -j oe -r y -V ${EXTRA_OPTS} ${CMD} ${DEPENDENCY}"
